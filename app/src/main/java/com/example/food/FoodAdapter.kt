@@ -11,6 +11,15 @@ import com.example.food.databinding.FoodItemsBinding
 
 class FoodAdapter: ListAdapter<Food, RecyclerView.ViewHolder>(DIFF_CALLBACK){
  var s=20f
+  private lateinit var mlistener: onItemClickListener
+    interface onItemClickListener{
+        fun onItemClick(Position: Int){
+
+        }
+    }
+    fun setOnItemClickListener(listener: onItemClickListener){
+        mlistener=listener
+    }
 
 companion object{
     private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Food>() {
@@ -30,7 +39,7 @@ companion object{
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             RecyclerView.ViewHolder {
         binding = FoodItemsBinding.inflate(LayoutInflater.from(parent.context),parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding,mlistener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -40,7 +49,7 @@ companion object{
         }
     }
 
-    inner class ViewHolder(val itemBinding: FoodItemsBinding):
+    inner class ViewHolder(val itemBinding: FoodItemsBinding,listener: onItemClickListener):
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: Food){
 
@@ -48,7 +57,18 @@ companion object{
             itemBinding.tvName.text = item.name
             itemBinding.ivAvatar.setImageResource(item.imageUrl)
         }
+        init {
+            itemBinding.food.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
+        }
+
+
     }
+
+
+
+
 }
 
 

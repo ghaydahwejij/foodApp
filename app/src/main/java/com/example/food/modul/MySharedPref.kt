@@ -9,7 +9,7 @@ class MySharedPref(context: Context) {
 
         private const val Size =30f
         private const val Key = "info"
-
+        private const val Food = "items"
 
 
 
@@ -26,6 +26,13 @@ class MySharedPref(context: Context) {
     fun getSize(): Float? {
           return sharedPref.getFloat(Size.toString(),30f)
     }
-
+    fun savePostion(postion:Int){
+        sharedPref.edit()
+            .putInt(Food, postion)
+            .apply()
+    }
+    fun getpsition(): Int {
+        return sharedPref.getInt(Food, 0)
+    }
 
 }
